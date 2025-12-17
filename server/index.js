@@ -4,6 +4,7 @@ const express = require('express');
 const defaultRouter = require('./routers/default.js');
 
 const authRouter = require('./routers/auth.js');
+const db = require('./db');
 
 const app = express();
 const port = 8080;
