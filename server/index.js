@@ -26,9 +26,8 @@ app.use(session({
 
 app.use(passport.authenticate('session'));
 
-app.use(defaultRouter);
-app.use('/login', authRouter);
-app.use('/oauth2', authRouter);
+// app.use(defaultRouter);
+app.use('/', authRouter);
 
 app.listen(port, () => {
   console.info(`App available on http://localhost:${port} or http://127.0.0.1:${port}`);

@@ -67,23 +67,27 @@ passport.deserializeUser(function(user, cb) {
 
 const router = express.Router();
 
-router.get('/', (req, res) => { // add 'next' here if needed
-  res.send('send login');
-});
+router.get('/login/federated/google', passport.authenticate('google'));
 
-//with /login/
-router.get('/federated/google', passport.authenticate('google'));
-// router.get('/federated/google', (req, res) => {
-//   res.send('routing is working');
-// });
-
-router.get('/redirect/google', passport.authenticate('google', {
+router.get('/oauth2/redirect/google', passport.authenticate('google', {
   successRedirect: '/',
   failureRedirect: '/login'
 }));
 
-// router.get('/redirect/google', (req, res) => {
-//   res.send('google redirect');
-// });
+router.post('/logout', function(req, res, next) {
+  // req.logout(function(err) {
+  //   if (err) { return next(err); }
+  //   res.redirect('/');
+  // });
+  req.session.user = null;
+  req.session.save(function(err) {
+    if (err) { return next(err); }
+
+    req.session.regenerate(function(err) {
+      if (err) { return next(err); }
+      res.redirect('/');
+    });
+  });
+});
 
 module.exports = router;
