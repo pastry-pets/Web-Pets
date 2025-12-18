@@ -30,7 +30,7 @@ app.use(passport.authenticate('session'));
 // app.use(defaultRouter);
 app.use('/', authRouter);
 // petRouter
-app.use('/', petRouter);
+app.use('/pet', petRouter);
 
 app.listen(port, () => {
   console.info(`App available on http://localhost:${port} or http://127.0.0.1:${port}`);
