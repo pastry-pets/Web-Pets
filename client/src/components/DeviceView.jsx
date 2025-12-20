@@ -41,11 +41,20 @@ const DeviceView = (props) => {
       setPet(defaultPet);
     }
   }, [props.user.name]);
+
+  // const dummyPet = () => {
+  //   axios.post('/pet', {petName: 'susie'})
+  //     .catch((err) => {
+  //       console.error(err, 'coming from dummyPet');
+  //     });
+  // };
+  // dummyPet();
+
   return (
     <div id="device" style={cssTest}>
       this is the device :D
       <ScreenView pet={ pet } />
-      <DashboardView skillData={pet.training} user={props.user}/>
+      <DashboardView skillData={pet.training} user={props.user} />
     </div>
   );
 };
