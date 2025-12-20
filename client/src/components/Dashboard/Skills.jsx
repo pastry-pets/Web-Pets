@@ -20,8 +20,13 @@ function SkillDashboard(props) {
   };
 
   const handleClickTraining = (event) => {
-    console.log('click');
-    console.log(event.target.name);
+    axios.patch(`/training/${event.target.name}`, {
+      delta: 5
+    })
+      .then(refreshSkillData)
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   return (
