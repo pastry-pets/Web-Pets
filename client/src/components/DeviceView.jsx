@@ -62,6 +62,14 @@ const DeviceView = (props) => {
       });
   };
 
+  const [petName, setPetName] = useState('');
+  // update petname
+  const changePetName = () => {
+    axios.patch('/pet', {petName})
+      .catch((err) => {
+        console.error(err);
+      });
+  };
 
   return (
     <div id="device" className={ deviceStyles.join(' ') }>
@@ -73,6 +81,10 @@ const DeviceView = (props) => {
         refreshSkillData={refreshSkillData}
       />
       <button onClick={deletePet}>Delete Pet</button>
+      <div>
+        <input type='text' value={petName} onChange={(e) => setPetName(e.target.value)}/>
+        <button onClick={changePetName}>Submit</button>
+      </div>
     </div>
   );
 };
