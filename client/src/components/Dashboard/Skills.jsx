@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 function SkillDashboard({ skills, refreshSkillData }) {
+  const [menuOpen, setMenuOpen] = useState(false);
   const [skillToDelete, setSkillToDelete] = useState('');
+  const [skillToCreate, setSkillToCreate] = useState('');
 
   const handleClickTraining = (event) => {
     axios.patch(`/training/${event.target.name}`, {
@@ -27,6 +29,22 @@ function SkillDashboard({ skills, refreshSkillData }) {
     }
   };
 
+  const renderSkillChangeMenu = () => {
+    return (
+      <div>
+        <p>Learn a new skill</p>
+        <p>Forget a skill</p>
+        <select onChange={(e) => setSkillToDelete(e.target.value)}>
+          <option key={'none'} value={''}>Choose a skill</option>
+          {skills.map((skill) => {
+            return <option key={skill.name} value={skill._id}>{skill.name}</option>;
+          })}
+        </select>
+        <button onClick={handleDeleteTraining}>Forget this skill</button>
+      </div>
+    );
+  };
+
   return (
     <div>
       <h4>Skill Dashboard</h4>
@@ -37,16 +55,8 @@ function SkillDashboard({ skills, refreshSkillData }) {
           <button onClick={handleClickTraining} name={skill._id}>Train {skill.name}</button>
         </div>;
       })}
-      <h5>Change Skills</h5>
-      <p>Learn a new skill</p>
-      <p>Forget a skill</p>
-      <select onChange={(e) => setSkillToDelete(e.target.value)}>
-        <option key={'none'} value={''}>Choose a skill</option>
-        {skills.map((skill) => {
-          return <option key={skill.name} value={skill._id}>{skill.name}</option>;
-        })}
-      </select>
-      <button onClick={handleDeleteTraining}>Forget this skill</button>
+      <h5 onClick={() => setMenuOpen(m => !m)}>Change Skills</h5>
+      {menuOpen ? renderSkillChangeMenu() : null}
     </div>
   );
 }
