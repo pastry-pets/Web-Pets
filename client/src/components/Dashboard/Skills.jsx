@@ -6,6 +6,9 @@ function SkillDashboard({ skills, refreshSkillData }) {
   const [skillToDelete, setSkillToDelete] = useState('');
   const [skillToCreate, setSkillToCreate] = useState('');
 
+  // TODO: get real data from server!
+  const testSkills = ['Scratching', 'Acrobatics', 'Litter Box', 'Hunting', 'DNE'];
+
   const handleClickTraining = (event) => {
     axios.patch(`/training/${event.target.name}`, {
       delta: 5
@@ -16,7 +19,7 @@ function SkillDashboard({ skills, refreshSkillData }) {
       });
   };
 
-  const handleDeleteTraining = () => {
+  const handleDeleteSkill = () => {
     if (skillToDelete !== '') {
       axios.delete(`/training/${skillToDelete}`)
         .then(() => {
@@ -29,10 +32,30 @@ function SkillDashboard({ skills, refreshSkillData }) {
     }
   };
 
+  const handleCreateSkill = () => {
+    if (skillToCreate !== '') {
+      axios.post('/training', {skillName: skillToCreate})
+        .then(() => {
+          setSkillToCreate(''); // clear the created skill so it can't be created again
+          refreshSkillData();
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  };
+
   const renderSkillChangeMenu = () => {
     return (
       <div>
         <p>Learn a new skill</p>
+        <select onChange={(e) => setSkillToCreate(e.target.value)}>
+          <option key={'none'} value={''}>Choose a skill</option>
+          {testSkills.map((skill) => {
+            return <option key={skill} value={skill}>{skill}</option>;
+          })}
+        </select>
+        <button onClick={handleCreateSkill}>Learn this skill</button>
         <p>Forget a skill</p>
         <select onChange={(e) => setSkillToDelete(e.target.value)}>
           <option key={'none'} value={''}>Choose a skill</option>
@@ -40,7 +63,7 @@ function SkillDashboard({ skills, refreshSkillData }) {
             return <option key={skill.name} value={skill._id}>{skill.name}</option>;
           })}
         </select>
-        <button onClick={handleDeleteTraining}>Forget this skill</button>
+        <button onClick={handleDeleteSkill}>Forget this skill</button>
       </div>
     );
   };

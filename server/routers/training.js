@@ -1,5 +1,6 @@
 const express = require('express');
 const { Pet } = require('../db');
+const { skills } = require('../data/skills');
 
 const router = express.Router();
 
@@ -40,7 +41,6 @@ router.get('/stats', (req, res) => {
     });
 });
 
-// TODO:
 // POST a newly unlocked skill to add to the pet belonging to the current user
 router.post('/', (req, res) => {
   // check for authentication
@@ -50,17 +50,43 @@ router.post('/', (req, res) => {
     return;
   }
 
-  res.sendStatus(501);
+  // get data from request
+  const { skillName } = req.body;
 
-  // check if pet exists
+  // check if the skill to be added is a real skill
+  if (!Object.hasOwn(skills, skillName)) {
+    // if not, send a 404 and return
+    res.sendStatus(404);
+    return;
+  }
 
-  // get skill name out of req body
+  // look up the pet associated with the logged in user
+  Pet.findOne({ userId })
+    .then((pet) => {
+      // check that user has a pet
+      if (!pet) {
+        res.sendStatus(404);
+        return;
+      }
 
-  // check if it's a real skill
+      // check whether the pet already has the skill to avoid duplicates
+      if (pet.training.map(skill => skill.name).includes(skillName)) {
+        res.sendStatus(409);
+        return;
+      }
 
-  // if not, send 404
+      // add the skill and save the pet
+      pet.training.push({name: skillName, stat: 0});
 
-  // if so, add it and send 201
+      return pet.save()
+        .then(() => {
+          res.sendStatus(201);
+        });
+
+    })
+    .catch((error) => {
+      console.error('Failed to find pet', error);
+    });
 });
 
 // TODO:
@@ -132,7 +158,6 @@ router.patch('/:id', (req, res)=> {
     });
 });
 
-// TODO: test
 // DELETE a skill to remove it from the pet
 router.delete('/:id', (req, res) => {
   // check for authentication
@@ -156,9 +181,9 @@ router.delete('/:id', (req, res) => {
       // remove skill from pet and save the pet
       pet.training.id(skillId).deleteOne();
       return pet.save()
-      .then(() => {
-          res.sendStatus(200);
-        });
+        .then(() => {
+            res.sendStatus(200);
+          });
     })
     .catch((error) => {
       console.error('Failed to find pet', error);
