@@ -16,7 +16,7 @@ const DashboardView = ({ pet, user, availableSkills, behaviors, refreshSkillData
     if (pet) {
       switch (tab) {
         case 'Statuses':
-          return <Statuses />;
+          return <Statuses pet={pet}/>;
         case 'Interactions':
           return <Interactions pet={ pet } refreshPet={refreshPet} />;
         case 'Skills':
