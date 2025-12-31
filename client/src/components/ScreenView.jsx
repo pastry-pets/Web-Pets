@@ -27,7 +27,7 @@ const ScreenView = ({ pet, user, message , refreshPet}) => {
         refreshPet();
       })
       .catch((err) => {
-        console.error(err, 'coming from dummyPet');
+        console.error(err, 'coming from screenView');
       });
   };
 

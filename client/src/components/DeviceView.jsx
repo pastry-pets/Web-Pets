@@ -85,9 +85,9 @@ const DeviceView = ({user}) => {
   // add a delete button
   const deletePet = () => {
     axios.delete('/pet')
-    .then(() => {
-      refreshPet();
-    })
+      .then(() => {
+        refreshPet();
+      })
       .catch((err) => {
         console.error(err);
       });
@@ -97,9 +97,9 @@ const DeviceView = ({user}) => {
   // update petname
   const changePetName = () => {
     axios.patch('/pet', {name})
-    .then(() => {
-      refreshPet();
-    })
+      .then(() => {
+        refreshPet();
+      })
       .catch((err) => {
         console.error(err);
       });
