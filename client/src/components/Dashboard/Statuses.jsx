@@ -1,29 +1,9 @@
-import { useEffect, useState } from "react";
 import React from 'react';
-import axios from "axios";
 
 
-const Status = () => {
-  const [status, setStatus] = useState({
-    mood: 0,
-    love: 0,
-    health: 0
-  });
+const Status = ({pet}) => {
 
-  useEffect(() => {
-    // send the get request here
-    axios.get('/pet')
-      .then(({ data: { mood, love, health, hunger }}) => {
-        // so we should have one document following the session
-        setStatus({ mood, love, health, hunger });
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  });
-
-
-  const { mood, love, health, hunger } = status;
+  const { mood, love, health, hunger } = pet;
   // html
   return (
     <div>
