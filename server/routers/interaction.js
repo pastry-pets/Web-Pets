@@ -4,7 +4,7 @@ const express = require('express');
 const router = express.Router();
 
 const { Pet } = require('../db');
-const { handleTimer } = require('../data/updates');
+const { handleTimer, updateAllPets } = require('../data/updates');
 
 handleTimer();
 
@@ -27,6 +27,13 @@ router.patch('/:status', (req, res) => {
         res.sendStatus(500);
       });
   }
+});
+
+router.post('/updatenow', (req, res) => {
+  // this is risky because updateAllPets contains asynchronous code, but since it doesn't return a promise there's no way to hold the response until it's done
+  // ... but it's only for debug purposes, so it's fine
+  updateAllPets();
+  res.sendStatus(201);
 });
 
 module.exports = router;
