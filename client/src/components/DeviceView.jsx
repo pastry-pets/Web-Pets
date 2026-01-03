@@ -124,6 +124,15 @@ const DeviceView = ({user}) => {
 
   return (
     <div id="device" className={ deviceStyles.join(' ') }>
+      <div className="relative">
+        <div className="absolute right-[50px] bottom-[-29px]">
+          <button onClick={deletePet}>Delete Pet</button>
+          <div>
+            <input type='text' value={name} onChange={(e) => setName(e.target.value)}/>
+            <button onClick={changePetName}>Submit</button>
+          </div>
+        </div>
+      </div>
       this is the device :D
       <ScreenView
         pet={ pet }
@@ -140,11 +149,6 @@ const DeviceView = ({user}) => {
         refreshSkillData={refreshSkillData}
         refreshPet={refreshPet}
       />
-      <button onClick={deletePet}>Delete Pet</button>
-      <div>
-        <input type='text' value={name} onChange={(e) => setName(e.target.value)}/>
-        <button onClick={changePetName}>Submit</button>
-      </div>
     </div>
   );
 };
