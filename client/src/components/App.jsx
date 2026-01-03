@@ -51,6 +51,20 @@ const App = () => {
   };
 
   /**
+   * Sends a request to the server to trigger a pet update now instead of waiting for midnight. Strictly for debugging/demo.
+   * Note that this deliberately does not trigger a refresh of the page - the server doesn't actually wait until all pets are updated
+   * to send the response, so refreshing immediately might get stale data.
+   * @name handleForcedUpdate
+   * @function
+   */
+  const handleForcedUpdate = function() {
+    axios.post('/interact/updatenow')
+      .catch((error) => {
+        console.error('Failed to trigger server refresh:', error);
+      });
+  };
+
+  /**
    * Renders user information and a login/logout button as appropriate.
    * @name renderAuthData
    * @function
@@ -75,6 +89,7 @@ const App = () => {
   return (
     <div>
       {renderAuthData()}
+      <button onClick={handleForcedUpdate}>Update Now</button>
       <DeviceView user={user}/>
     </div>
   );
